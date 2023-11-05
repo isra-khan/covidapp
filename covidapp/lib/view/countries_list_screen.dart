@@ -1,7 +1,7 @@
 import 'package:covidapp/Services/state_services.dart';
 import 'package:covidapp/view/detail_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CountriesListScreen extends StatefulWidget {
@@ -13,7 +13,8 @@ class CountriesListScreen extends StatefulWidget {
 
 class _CountriesListScreenState extends State<CountriesListScreen> {
   TextEditingController _controller = new TextEditingController();
-  StateServices _services = new StateServices();
+  StateServicesController _servicesController =
+      Get.put(StateServicesController());
   String? name;
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
           ),
           Expanded(
               child: FutureBuilder(
-                  future: _services.fetchCountries(),
+                  future: _servicesController.fetchCountries(),
                   builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                     if (!snapshot.hasData) {
                       return Shimmer.fromColors(
@@ -138,33 +139,50 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DetailScreen(
-                                                    image: snapshot.data![index]
-                                                        ['countryInfo']['flag'],
-                                                    name: snapshot.data![index]
-                                                        ['country'],
-                                                    totalCases: snapshot
-                                                        .data![index]['cases'],
-                                                    totalRecovered:
-                                                        snapshot.data![index]
-                                                            ['recovered'],
-                                                    totalDeaths: snapshot
-                                                        .data![index]['deaths'],
-                                                    active: snapshot
-                                                        .data![index]['active'],
-                                                    test: snapshot.data![index]
-                                                        ['tests'],
-                                                    todayRecovered:
-                                                        snapshot.data![index]
-                                                            ['todayRecovered'],
-                                                    critical:
-                                                        snapshot.data![index]
-                                                            ['critical'],
-                                                  )));
+                                      Get.to(DetailScreen(
+                                        image: snapshot.data![index]
+                                            ['countryInfo']['flag'],
+                                        name: snapshot.data![index]['country'],
+                                        totalCases: snapshot.data![index]
+                                            ['cases'],
+                                        totalRecovered: snapshot.data![index]
+                                            ['recovered'],
+                                        totalDeaths: snapshot.data![index]
+                                            ['deaths'],
+                                        active: snapshot.data![index]['active'],
+                                        test: snapshot.data![index]['tests'],
+                                        todayRecovered: snapshot.data![index]
+                                            ['todayRecovered'],
+                                        critical: snapshot.data![index]
+                                            ['critical'],
+                                      ));
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             DetailScreen(
+                                      //               image: snapshot.data![index]
+                                      //                   ['countryInfo']['flag'],
+                                      //               name: snapshot.data![index]
+                                      //                   ['country'],
+                                      //               totalCases: snapshot
+                                      //                   .data![index]['cases'],
+                                      //               totalRecovered:
+                                      //                   snapshot.data![index]
+                                      //                       ['recovered'],
+                                      //               totalDeaths: snapshot
+                                      //                   .data![index]['deaths'],
+                                      //               active: snapshot
+                                      //                   .data![index]['active'],
+                                      //               test: snapshot.data![index]
+                                      //                   ['tests'],
+                                      //               todayRecovered:
+                                      //                   snapshot.data![index]
+                                      //                       ['todayRecovered'],
+                                      //               critical:
+                                      //                   snapshot.data![index]
+                                      //                       ['critical'],
+                                      //             )));
                                     },
                                     child: ListTile(
                                         contentPadding: EdgeInsets.symmetric(

@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:covidapp/Services/state_services.dart';
 import 'package:covidapp/view/world_states.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,6 +25,8 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     Timer(const Duration(seconds: 5), () {
+      StateServicesController _servicesController =
+          Get.put(StateServicesController());
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => WorldStateScreen()));
     });
