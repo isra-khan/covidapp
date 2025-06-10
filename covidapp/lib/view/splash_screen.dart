@@ -1,7 +1,6 @@
-import 'dart:async';
-
-import 'package:covidapp/Services/state_services.dart';
-import 'package:covidapp/view/world_states.dart';
+import 'package:covidapp/constant/assets.dart';
+import 'package:covidapp/constant/responsive_config.dart';
+import 'package:covidapp/controller/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:get/get.dart';
@@ -15,52 +14,59 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 3),
-  )..repeat();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    Timer(const Duration(seconds: 5), () {
-      StateServicesController _servicesController =
-          Get.put(StateServicesController());
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => WorldStateScreen()));
-    });
-  }
+  final SplashController _stateServicesController =
+      Get.find<SplashController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AnimatedBuilder(
-              child: Container(
-                width: 200,
-                height: 200,
-                child: Image.asset("images/virus.png"),
-              ),
-              animation: _controller,
-              builder: (BuildContext context, Widget? child) {
-                return Transform.rotate(
-                    angle: _controller.value * 2.0 + math.pi, child: child);
-              }),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * .2,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Covid-19\nTracker App",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 25),
-            ),
-          ),
-        ],
+      backgroundColor: Colors.white,
+      body: _buildSplashContent(context),
+    );
+  }
+
+  ///  Splash screen main content
+  Widget _buildSplashContent(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildRotatingVirus(),
+        SizedBox(height: Responsive(context).height * 0.2),
+        _buildTitleText(),
+      ],
+    );
+  }
+
+  /// 🦠 Rotating virus image
+  Widget _buildRotatingVirus() {
+    return AnimatedBuilder(
+      animation: _stateServicesController,
+      child: SizedBox(
+        width: 200,
+        height: 200,
+        child: Image.asset(Assets().virus),
+      ),
+      builder: (BuildContext context, Widget? child) {
+        return Transform.rotate(
+          angle: _stateServicesController.controller.value * 2.0 * math.pi,
+          child: child,
+        );
+      },
+    );
+  }
+
+  ///  Title text
+  Widget _buildTitleText() {
+    return const Align(
+      alignment: Alignment.center,
+      child: Text(
+        "Covid-19\nTracker App",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 25,
+        ),
       ),
     );
   }

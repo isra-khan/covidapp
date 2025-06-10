@@ -1,4 +1,5 @@
-import 'package:covidapp/view/splash_screen.dart';
+import 'package:covidapp/view/routes/routes.dart';
+import 'package:covidapp/view/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false, home: SplashScreen());
+      debugShowCheckedModeBanner: false,
+      initialRoute: Routes.home,
+      getPages: AppPages.pages,
+    );
   }
 }
