@@ -32,7 +32,6 @@ A simple and intuitive mobile application built with Flutter and GetX to track r
 This app utilizes the following API endpoints to fetch COVID-19 data
 
 
-# Getting Started
 
 
 
